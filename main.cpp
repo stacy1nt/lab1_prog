@@ -20,9 +20,9 @@ void fill (bool is_it_first_run, vector <Flat> &flats_to_fill) {   //буліє�
     while (true) {                                                 //навчальний запуск функції при значенні true
         Flat tmpFlat;                                              //та другий, "предиктивний", при значенні false,
         if (is_it_first_run){                                      //відрізняються вони наявністю запису ціни квартири
-            cout << "Enter the square value (enter 0 to stop):" << endl;
+            cout << "Enter the square value (enter 0 to stop learning):" << endl;
         }else{
-            cout << "Enter the square value for your flat:" << endl;
+            cout << "Now enter the square value for your flat of dream:" << endl;
         }
         cin >> tmpFlat.square;
         if (tmpFlat.square == 0) break;
@@ -90,10 +90,12 @@ double learn (vector <Flat> flats_db){
     }
 
     //невеличкий метод розрахування середньої вартості одного поінту, множника
+    vector <double> av_fact;
     double factor_average = 0;
     double tmp_sum = 0;
     for (int i = 0; i < flats_db.size(); ++i) {
         double tmp_factor = flats_db.at(i).cost / points[i];
+        av_fact.push_back(tmp_factor);
         tmp_sum += tmp_factor;
         factor_average = tmp_sum / flats_db.size();
     }
@@ -101,36 +103,41 @@ double learn (vector <Flat> flats_db){
 }
 
 //функція саме розрахунку вартості шуканої квартири шляхом підрахування її балів та домноження їх на ср. вартість поінту
-void predict (double &average_factor, vector <Flat> &tmpFlat){
-    fill (false, tmpFlat);  //те саме друге заповнення параметрів квартири без вводу ціни
-
-    int points = 0;
-        points = tmpFlat.at(0).square * 1 + tmpFlat.at(0).num_bedr * 20 + tmpFlat.at(0).num_wc * 10;
-        if (tmpFlat.at(0).is_commercial) points += 100;
-        if (tmpFlat.at(0).dist_min < 6) {
-            points += 50;
-        } else if (tmpFlat.at(0).dist_min < 11){
-            points += 20;
-        } else if (tmpFlat.at(0).dist_min < 21) {
-            points += 10;
+void predict (double &average_factor, vector <Flat> &tmpFlat) {
+    fill(false, tmpFlat);  //те саме друге заповнення параметрів квартири без вводу ціни
+    vector <double> points;
+    int i_counter = 0;
+    for (int i = 0; i < tmpFlat.size(); i++) {
+        int tmp_points = tmpFlat.at(i).square * 1 + tmpFlat.at(i).num_bedr * 20 + tmpFlat.at(i).num_wc * 10;
+        if (tmpFlat.at(i).is_commercial) tmp_points += 100;
+        if (tmpFlat.at(i).dist_min < 6) {
+            tmp_points += 50;
+        } else if (tmpFlat.at(i).dist_min < 11) {
+            tmp_points += 20;
+        } else if (tmpFlat.at(i).dist_min < 21) {
+            tmp_points += 10;
         }
-
-    cout << "average factor is  " << average_factor << endl;
-    cout << "points for this flat " << points << endl;
-    cout << "average cost for the flat like this is " << points*average_factor << endl;
+        points.push_back(tmp_points);
+        cout << "Average cost for the flat like this is " << points[i] * average_factor << endl;
+    }
 }
 
 
+    int main() {
 
-int main() {
+        vector<Flat> flats;
+        vector<Flat> flatToPredict;
+        bool answer;
 
-    vector <Flat> flats;
-    vector <Flat> flatToPredict;
+        fill(true, flats);
+        double average_factor = learn(flats);
 
-    fill(true,flats);
-    double average_factor = learn(flats);
+        predict(average_factor, flatToPredict);
 
-    predict(average_factor, flatToPredict);
-
-    return 0;
-}
+        cout << "do you want to continue searching for the flat of your dream?(1 for yes, 0 for no)" << endl;
+        cin >> answer;
+        if (answer) {
+            predict(average_factor, flatToPredict);
+        }
+        return 0;
+    }
