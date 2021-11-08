@@ -3,6 +3,8 @@
 
 using namespace std;
 
+int it_counter = 0;
+
 //структура або параметри квартири, тип даних Flat
 struct Flat{
     double square;
@@ -106,7 +108,6 @@ double learn (vector <Flat> flats_db){
 void predict (double &average_factor, vector <Flat> &tmpFlat) {
     fill(false, tmpFlat);  //те саме друге заповнення параметрів квартири без вводу ціни
     vector <double> points;
-    int i_counter = 0;
     for (int i = 0; i < tmpFlat.size(); i++) {
         int tmp_points = tmpFlat.at(i).square * 1 + tmpFlat.at(i).num_bedr * 20 + tmpFlat.at(i).num_wc * 10;
         if (tmpFlat.at(i).is_commercial) tmp_points += 100;
@@ -118,8 +119,9 @@ void predict (double &average_factor, vector <Flat> &tmpFlat) {
             tmp_points += 10;
         }
         points.push_back(tmp_points);
-        cout << "Average cost for the flat like this is " << points[i] * average_factor << endl;
     }
+        cout << "Average cost for the flat like this is " << points[it_counter] * average_factor << endl;
+        it_counter++;
 }
 
 
