@@ -27,11 +27,13 @@ void fill (bool is_it_first_run, vector <Flat> &flats_to_fill) {   //буліє�
             cout << "Now enter the square value for your flat of dream:" << endl;
         }
         cin >> tmpFlat.square;
-        if (tmpFlat.square == 0) break;
+        if (tmpFlat.square == 0) {
+            break;
+        }
 
         if (tmpFlat.square > 500 || tmpFlat.square < 10) {         //sanity check: при вводі якогось дивного значення
             cout << "incorrect value, please try again" << endl;   //ми відправляємо юзера перезаповнити параметри
-            fill(true,flats_to_fill);                //квартири за допомогою рекурсії, а цю квартиру
+            fill(is_it_first_run,flats_to_fill);                //квартири за допомогою рекурсії, а цю квартиру
             break;                                                 //із дивними параметрами до вектору додано не буде.
         }                                                          //перевірка типу даних не є суттєвою, тому що
                                                                    //у випадку неправильного вводу випаде помилка
@@ -39,7 +41,7 @@ void fill (bool is_it_first_run, vector <Flat> &flats_to_fill) {   //буліє�
         cin >> tmpFlat.num_bedr;
         if (tmpFlat.num_bedr > 5 || tmpFlat.num_bedr < 1) {
             cout << "incorrect value, please try again" << endl;
-            fill(true,flats_to_fill);
+            fill(is_it_first_run,flats_to_fill);
             break;
         }
 
@@ -47,7 +49,7 @@ void fill (bool is_it_first_run, vector <Flat> &flats_to_fill) {   //буліє�
         cin >> tmpFlat.num_wc;
         if (tmpFlat.num_wc > 5 || tmpFlat.num_wc < 1) {
             cout << "incorrect value, please try again" << endl;
-            fill(true,flats_to_fill);
+            fill(is_it_first_run,flats_to_fill);
             break;
         }
 
@@ -55,7 +57,7 @@ void fill (bool is_it_first_run, vector <Flat> &flats_to_fill) {   //буліє�
         cin >> tmpFlat.dist_min;
         if (tmpFlat.dist_min > 180 || tmpFlat.dist_min < 1) {
             cout << "incorrect value, please try again" << endl;
-            fill(true,flats_to_fill);
+            fill(is_it_first_run,flats_to_fill);
             break;
         }
 
@@ -67,7 +69,7 @@ void fill (bool is_it_first_run, vector <Flat> &flats_to_fill) {   //буліє�
             cin >> tmpFlat.cost;
             if (tmpFlat.cost > 1000000000 || tmpFlat.cost < 50000) {
                 cout << "incorrect value, please try again" << endl;
-                fill(true,flats_to_fill);
+                fill(is_it_first_run,flats_to_fill);
                 break;
             }
         }
@@ -75,7 +77,6 @@ void fill (bool is_it_first_run, vector <Flat> &flats_to_fill) {   //буліє�
         if (!is_it_first_run) break;  //закінчення функції після вводу "предиктивної" частини
     }
 }
-
 //функція навчання та розрахунку балів квартир з початковіх даних
 double learn (vector <Flat> flats_db){
     vector <int> points;
@@ -105,7 +106,6 @@ double learn (vector <Flat> flats_db){
 
 //функція саме розрахунку вартості шуканої квартири шляхом підрахування її балів та домноження їх на ср. вартість поінту
 void predict (double &average_factor, vector <Flat> &tmpFlat) {
-
     fill(false, tmpFlat);  //те саме друге заповнення параметрів квартири без вводу ціни
 
     vector <double> points;
