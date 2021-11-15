@@ -19,9 +19,17 @@ struct Flat{
 //функція заповнення початкових даних та пошукових параметрів,
 //навчальні знаення записуються у вектор даних flats типу Flat
 void fill (bool is_it_first_run, vector <Flat> &flats_to_fill) {   //булієва функція is_it_first_run позначає перший
-    while (true) {                                                 //навчальний запуск функції при значенні true
-        Flat tmpFlat;                                              //та другий, "предиктивний", при значенні false,
-        if (is_it_first_run){                                      //відрізняються вони наявністю запису ціни квартири
+                                                                   //навчальний запуск функції при значенні true
+    while (true) {                                                 //та другий, "предиктивний", при значенні false.
+        Flat tmpFlat;                                              //відрізняються вони наявністю запису ціни квартири
+        while (cin.fail()){
+            cin.clear();                                           //sanity check на дані невірного типу
+            cin.sync();
+            fill(is_it_first_run, flats_to_fill);
+            break;
+        }
+
+        if (is_it_first_run){
             cout << "Enter the square value (enter 0 to stop learning):" << endl;
         }else{
             cout << "Now enter the square value for your flat of dream:" << endl;
@@ -35,11 +43,11 @@ void fill (bool is_it_first_run, vector <Flat> &flats_to_fill) {   //буліє�
             cout << "incorrect value, please try again" << endl;   //ми відправляємо юзера перезаповнити параметри
             fill(is_it_first_run,flats_to_fill);                //квартири за допомогою рекурсії, а цю квартиру
             break;                                                 //із дивними параметрами до вектору додано не буде.
-        }                                                          //перевірка типу даних не є суттєвою, тому що
-                                                                   //у випадку неправильного вводу випаде помилка
+        }
+
         cout << "Enter the number of bedrooms:" << endl;
         cin >> tmpFlat.num_bedr;
-        if (tmpFlat.num_bedr > 5 || tmpFlat.num_bedr < 1) {
+        if (tmpFlat.num_bedr > 10 || tmpFlat.num_bedr < 1) {
             cout << "incorrect value, please try again" << endl;
             fill(is_it_first_run,flats_to_fill);
             break;
@@ -141,16 +149,16 @@ void predict (double &average_factor, vector <Flat> &tmpFlat) {
 }
 
 
-    int main() {
+int main() {
 
-        vector<Flat> flats;
-        vector<Flat> flatToPredict;
+    vector<Flat> flats;
+    vector<Flat> flatToPredict;
 
-        fill(true, flats);
+    fill(true, flats);
 
-        double average_factor = learn(flats);
+    double average_factor = learn(flats);
 
-        predict(average_factor, flatToPredict);
+    predict(average_factor, flatToPredict);
 
-        return 0;
-    }
+    return 0;
+}
